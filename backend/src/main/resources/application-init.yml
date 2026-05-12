@@ -1,0 +1,7 @@
+spring:
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:db/schema.sql
+      data-locations: classpath:db/cards_seed.sql
+      continue-on-error: false

@@ -1,0 +1,40 @@
+# Created by https://www.toptal.com/developers/gitignore/api/java,node,vue,windows
+
+# Java
+*.class
+*.log
+target/
+.gradle/
+build/
+
+# Maven
+.mvn/wrapper/maven-wrapper.jar
+
+# Node
+node_modules/
+dist/
+dist-ssr/
+*.tsbuildinfo
+*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDE
+.idea/
+.vscode/*.log
+*.iml
+
+# OS
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Local data maintenance tools
+scripts/
