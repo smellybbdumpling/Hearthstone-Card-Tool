@@ -2,6 +2,8 @@
 
 炉石传说标准环境卡牌查询与收藏工具。项目采用前后端分离结构：后端位于 `backend`，前端位于 `frontend`，文档位于 `docs`。
 
+![Hearthstone Card Tool](project_display.png)
+
 ## 功能概览
 
 - 首页自动加载标准环境卡牌。
