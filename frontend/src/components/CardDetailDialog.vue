@@ -26,9 +26,9 @@
         <p class="description">{{ card.description || '暂无描述' }}</p>
         <p v-if="card.flavorText" class="flavor-text">{{ card.flavorText }}</p>
         <div class="dialog-actions">
-          <el-button @click="copy(card.nameCn)">复制中文名</el-button>
-          <el-button @click="copy(card.nameEn || card.nameCn)">复制英文名</el-button>
-          <el-button type="primary" @click="$emit('favorite', card)">收藏/取消收藏</el-button>
+          <el-button :icon="CopyDocument" @click="copy(card.nameCn)">复制中文名</el-button>
+          <el-button :icon="CopyDocument" @click="copy(card.nameEn || card.nameCn)">复制英文名</el-button>
+          <el-button type="primary" :icon="Star" @click="$emit('favorite', card)">收藏/取消收藏</el-button>
         </div>
       </div>
     </div>
@@ -38,6 +38,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { ElMessage } from 'element-plus'
+import { CopyDocument, Star } from '@element-plus/icons-vue'
 import type { Card } from '@/api/types'
 
 const props = defineProps<{ modelValue: boolean; card: Card | null }>()

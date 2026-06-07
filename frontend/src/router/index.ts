@@ -15,10 +15,16 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
   const auth = useAuthStore()
   if (to.meta.requiresAuth && !auth.isLoggedIn) {
     return '/login'
+  }
+  if (to.meta.requiresAuth) {
+    const valid = await auth.refreshCurrentUser()
+    if (!valid) {
+      return '/login'
+    }
   }
   return true
 })

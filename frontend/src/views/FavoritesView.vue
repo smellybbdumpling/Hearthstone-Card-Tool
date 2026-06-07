@@ -6,24 +6,30 @@
     </div>
 
     <div v-loading="loading" class="card-grid">
-      <article v-for="card in cards" :key="card.id" class="card-tile">
-        <div class="card-image" @click="openDetail(card)">
-          <img v-if="card.imageUrl" :src="card.imageUrl" :alt="card.nameCn" />
-          <span v-else>{{ card.nameCn }}</span>
-        </div>
-        <div class="card-content">
-          <h3>{{ card.nameCn }}</h3>
-          <p>{{ card.nameEn }}</p>
-          <div class="tags">
-            <el-tag size="small">{{ card.cardClass }}</el-tag>
-            <el-tag size="small" type="warning">{{ card.cardType || '-' }}</el-tag>
+      <template v-if="cards.length">
+        <article v-for="card in cards" :key="card.id" class="card-tile">
+          <div class="card-image" @click="openDetail(card)">
+            <img v-if="card.imageUrl" :src="card.imageUrl" :alt="card.nameCn" />
+            <span v-else>{{ card.nameCn }}</span>
           </div>
-          <div class="card-actions">
-            <el-button size="small" @click="openDetail(card)">详情</el-button>
-            <el-button size="small" type="danger" @click="remove(card)">取消收藏</el-button>
+          <div class="card-content">
+            <div class="card-title-row">
+              <h3>{{ card.nameCn }}</h3>
+              <span class="cost-badge">{{ card.cost ?? '-' }}费</span>
+            </div>
+            <p>{{ card.nameEn }}</p>
+            <div class="tags">
+              <el-tag size="small">{{ card.cardClass }}</el-tag>
+              <el-tag size="small" type="warning">{{ card.cardType || '-' }}</el-tag>
+            </div>
+            <div class="card-actions">
+              <el-button size="small" :icon="ViewIcon" @click="openDetail(card)">详情</el-button>
+              <el-button size="small" type="danger" :icon="Delete" @click="remove(card)">取消收藏</el-button>
+            </div>
           </div>
-        </div>
-      </article>
+        </article>
+      </template>
+      <el-empty v-else-if="!loading" description="暂无收藏" />
     </div>
 
     <el-pagination
@@ -43,6 +49,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
+import { Delete, View as ViewIcon } from '@element-plus/icons-vue'
 import { api } from '@/api'
 import type { Card } from '@/api/types'
 import CardDetailDialog from '@/components/CardDetailDialog.vue'

@@ -8,11 +8,11 @@
       </nav>
       <div class="account">
         <template v-if="auth.isLoggedIn">
-          <span>{{ auth.user?.nickname }}</span>
-          <el-button size="small" @click="auth.logout()">退出</el-button>
+          <span class="account-name">{{ auth.user?.nickname }}</span>
+          <el-button size="small" :icon="SwitchButton" @click="auth.logout()">退出</el-button>
         </template>
         <template v-else>
-          <el-button size="small" @click="$router.push('/login')">登录</el-button>
+          <el-button size="small" :icon="UserFilled" @click="$router.push('/login')">登录</el-button>
         </template>
       </div>
     </el-header>
@@ -23,6 +23,7 @@
 </template>
 
 <script setup lang="ts">
+import { SwitchButton, UserFilled } from '@element-plus/icons-vue'
 import { useAuthStore } from '@/stores/auth'
 
 const auth = useAuthStore()

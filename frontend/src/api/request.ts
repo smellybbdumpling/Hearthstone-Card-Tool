@@ -23,6 +23,15 @@ request.interceptors.response.use(
     return response
   },
   (error) => {
+    const status = error.response?.status
+    if (status === 401 || status === 403) {
+      localStorage.removeItem('hs_token')
+      localStorage.removeItem('hs_user')
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login'
+      }
+      return Promise.reject(new Error('登录已失效，请重新登录'))
+    }
     const body = error.response?.data as Partial<ApiResponse<unknown>> | undefined
     const message = body?.message || error.message || '请求失败'
     return Promise.reject(new Error(message))

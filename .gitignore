@@ -35,6 +35,12 @@ $RECYCLE.BIN/
 .env
 .env.*
 !.env.example
+backend/src/main/resources/application.yml
+
+# Local Codex/tooling runtime data
+.codex-run/
+.codegraph/
+.reasonix/
 
 # Local data maintenance tools
 scripts/

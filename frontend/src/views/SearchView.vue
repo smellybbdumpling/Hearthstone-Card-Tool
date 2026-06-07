@@ -1,5 +1,10 @@
 <template>
   <section class="tool-page">
+    <div class="page-heading">
+      <h1>卡牌查询</h1>
+      <span>共 {{ total }} 张</span>
+    </div>
+
     <div class="filter-bar">
       <el-input v-model="filters.keyword" clearable placeholder="搜索中文名或英文名" @keyup.enter="loadCards" />
       <el-select v-model="filters.cardSet" clearable placeholder="系列">
@@ -17,32 +22,40 @@
       <el-select v-model="filters.cost" clearable placeholder="费用">
         <el-option v-for="item in costs" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
-      <el-button type="primary" @click="loadCards">查询</el-button>
+      <el-button type="primary" :icon="Search" @click="loadCards">查询</el-button>
     </div>
 
-    <div class="result-meta">共 {{ total }} 张</div>
+    <div class="result-meta">
+      <span>当前页 {{ cards.length }} 张</span>
+      <span>每页 {{ filters.size }} 张</span>
+    </div>
 
     <div v-loading="loading" class="card-grid">
-      <article v-for="card in cards" :key="card.id" class="card-tile">
-        <div class="card-image" @click="openDetail(card)">
-          <img v-if="card.imageUrl" :src="card.imageUrl" :alt="card.nameCn" />
-          <span v-else>{{ card.nameCn }}</span>
-        </div>
-        <div class="card-content">
-          <h3>{{ card.nameCn }}</h3>
-          <p>{{ card.nameEn }}</p>
-          <div class="tags">
-            <el-tag size="small">{{ card.cost ?? '-' }}费</el-tag>
-            <el-tag size="small" type="success">{{ card.cardClass }}</el-tag>
-            <el-tag size="small" type="warning">{{ card.cardType || '-' }}</el-tag>
+      <template v-if="cards.length">
+        <article v-for="card in cards" :key="card.id" class="card-tile">
+          <div class="card-image" @click="openDetail(card)">
+            <img v-if="card.imageUrl" :src="card.imageUrl" :alt="card.nameCn" />
+            <span v-else>{{ card.nameCn }}</span>
           </div>
-          <div class="card-actions">
-            <el-button size="small" @click="openDetail(card)">详情</el-button>
-            <el-button size="small" @click="copy(card.nameCn)">复制</el-button>
-            <el-button size="small" type="primary" @click="toggleFavorite(card)">收藏</el-button>
+          <div class="card-content">
+            <div class="card-title-row">
+              <h3>{{ card.nameCn }}</h3>
+              <span class="cost-badge">{{ card.cost ?? '-' }}费</span>
+            </div>
+            <p>{{ card.nameEn }}</p>
+            <div class="tags">
+              <el-tag size="small" type="success">{{ card.cardClass }}</el-tag>
+              <el-tag size="small" type="warning">{{ card.cardType || '-' }}</el-tag>
+            </div>
+            <div class="card-actions">
+              <el-button size="small" :icon="ViewIcon" @click="openDetail(card)">详情</el-button>
+              <el-button size="small" :icon="CopyDocument" @click="copy(card.nameCn)">复制</el-button>
+              <el-button size="small" type="primary" :icon="Star" @click="toggleFavorite(card)">收藏</el-button>
+            </div>
           </div>
-        </div>
-      </article>
+        </article>
+      </template>
+      <el-empty v-else-if="!loading" description="暂无卡牌" />
     </div>
 
     <el-pagination
@@ -63,6 +76,7 @@
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import { CopyDocument, Search, Star, View as ViewIcon } from '@element-plus/icons-vue'
 import { api } from '@/api'
 import type { Card } from '@/api/types'
 import { useAuthStore } from '@/stores/auth'
